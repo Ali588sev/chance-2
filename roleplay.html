@@ -27,8 +27,6 @@
   .btns { display: flex; gap: 6px; }
   button { background: #2a2a32; color: var(--text); border: none; padding: 7px 10px; border-radius: 8px; font-size: 14px; cursor: pointer; }
   button:active { opacity: 0.7; }
-  
-  /* Боковое меню чатов */
   #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 15; }
   #sidebar { position: fixed; top: 0; bottom: 0; left: -270px; width: 260px; background: var(--sidebar); border-right: 1px solid #2d2d35; z-index: 20; transition: left 0.2s ease; display: flex; flex-direction: column; padding: 14px; }
   #sidebar.open { left: 0; }
@@ -38,7 +36,6 @@
   .chat-item.active { background: #2b354f; border: 1px solid var(--accent); }
   .chat-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; padding-right: 8px; }
   .del-chat { color: var(--muted); font-size: 14px; padding: 2px 6px; }
-
   #chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .msg { max-width: 88%; padding: 12px 14px; border-radius: 14px; line-height: 1.5; font-size: 15px; white-space: pre-wrap; word-wrap: break-word; }
   .user { background: var(--user-msg); align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -61,15 +58,15 @@
 </head>
 <body>
 
-<div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
+<div id="sidebar-overlay"></div>
 <div id="sidebar">
-  <button class="new-chat-btn" onclick="createNewChat()">+ Новая ролка</button>
+  <button class="new-chat-btn" id="btn-new-chat">+ Новая ролка</button>
   <div id="chat-list"></div>
 </div>
 
 <header>
   <div class="left-head">
-    <button onclick="toggleSidebar(true)">☰</button>
+    <button id="btn-menu">☰</button>
     <h1><span class="dot"></span> <span id="header-title">DeepSeek V3</span></h1>
   </div>
   <div class="btns">
@@ -110,22 +107,19 @@
 <script>
   const DEFAULT_PROMPT = "Ты — талантливый соигрок в текстовой ролевой игре. Пиши на русском языке динамично, эмоционально и живо, строго на 4–6 абзацев, по 3–4 предложения в каждом. Избегай лишней воды и затянутых описаний природы, делай упор на атмосферу, реакции, действия и живые диалоги. Никогда не описывай действия, слова и мысли персонажа игрока. Всегда оставляй героям надежду и тяни сюжет к счастливому финалу (хэппи-энду), даже в самых мрачных ситуациях.";
 
-  let chats = JSON.parse(localStorage.getItem('rp_chats') || '[]');
-  let activeChatId = localStorage.getItem('rp_active_id') || '';
+  let chats = [];
+  try { chats = JSON.parse(localStorage.getItem('rp_chats') || '[]'); } catch(e) { chats = []; }
+  if (!Array.isArray(chats) || !chats.length) {
+    chats = [{ id: String(Date.now()), title: 'Ролка #1', messages: [] }];
+  }
+  let activeChatId = localStorage.getItem('rp_active_id') || chats.at(0).id;
   let apiKey = localStorage.getItem('rp_gh_key') || '';
   let sysPrompt = localStorage.getItem('rp_prompt') || DEFAULT_PROMPT;
   let currentImageBase64 = null;
 
-  if (!chats.length) {
-    const id = Date.now().toString();
-    chats = [{ id: id, title: 'Ролка #1', messages: [] }];
-    activeChatId = id;
-    saveAll();
-  }
-
   function getActiveChat() {
     let c = chats.find(x => x.id === activeChatId);
-    if (!c) { c = chats[0]; activeChatId = c.id; }
+    if (!c) { c = chats.at(0); activeChatId = c.id; }
     return c;
   }
 
@@ -159,10 +153,9 @@
         if (confirm('Удалить этот чат?')) {
           chats = chats.filter(x => x.id !== c.id);
           if (!chats.length) {
-            const id = Date.now().toString();
-            chats = [{ id: id, title: 'Ролка #1', messages: [] }];
+            chats = [{ id: String(Date.now()), title: 'Ролка #1', messages: [] }];
           }
-          activeChatId = chats[0].id;
+          activeChatId = chats.at(0).id;
           saveAll();
           renderChatList();
           render();
@@ -172,15 +165,6 @@
       item.appendChild(del);
       listEl.appendChild(item);
     });
-  }
-
-  function createNewChat() {
-    const id = Date.now().toString();
-    chats.unshift({ id: id, title: 'Новая ролка', messages: [] });
-    activeChatId = id;
-    saveAll();
-    render();
-    toggleSidebar(false);
   }
 
   function render() {
@@ -204,3 +188,14 @@
         const act = document.createElement('div');
         act.className = 'msg-actions';
         const regenBtn = document.createElement('span');
+        regenBtn.textContent = '🔄 Перегенерировать';
+        regenBtn.onclick = () => { chat.messages.pop(); sendMessage(true); };
+        act.appendChild(regenBtn);
+        div.appendChild(act);
+      }
+      chatEl.appendChild(div);
+    });
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+ 
