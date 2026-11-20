@@ -349,6 +349,252 @@
       actions.appendChild(delBtn);
       item.appendChild(info);
       item.appendChild(actions);
+            listEl.appendChild(item);
+    });
+  }
+
+  function render() {
+    const chat = getActiveChat();
+    const chatEl = document.getElementById('chat');
+    chatEl.innerHTML = '';
+    chat.messages.forEach((m, idx) => {
+      const div = document.createElement('div');
+      div.className = 'msg ' + (m.role === 'user' ? 'user' : 'bot');
+      if (m.img) {
+        const im = document.createElement('img');
+        im.src = m.img;
+        div.appendChild(im);
+      }
+      const txt = document.createElement('div');
+      txt.textContent = m.displayContent || m.content;
+      div.appendChild(txt);
+
+      if (m.role === 'assistant' && idx === chat.messages.length - 1) {
+        const act = document.createElement('div');
+        act.className = 'msg-actions';
+        const regenBtn = document.createElement('span');
+        regenBtn.textContent = '↻ Перегенерировать';
+        regenBtn.onclick = function() { chat.messages.pop(); sendMessage(true); };
+        act.appendChild(regenBtn);
+        div.appendChild(act);
+      }
+      chatEl.appendChild(div);
+    });
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 96;
+        canvas.height = 96;
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+        canvas.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, 96, 96);
+        userAvatar = canvas.toDataURL('image/jpeg', 0.85);
+        localStorage.setItem('rp_user_avatar', userAvatar);
+        updateAvatarPreview();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearAvatar() {
+    userAvatar = '';
+    localStorage.removeItem('rp_user_avatar');
+    document.getElementById('avatar-input').value = '';
+    updateAvatarPreview();
+  }
+
+  function updateAvatarPreview() {
+    const prev = document.getElementById('avatar-preview');
+    if (userAvatar) {
+      prev.innerHTML = '<img src="' + userAvatar + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+    } else {
+      prev.textContent = 'Я';
+    }
+  }
+
+  function handleImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxDim = 800;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+          else { w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+        document.getElementById('preview-img').src = currentImageBase64;
+        document.getElementById('preview-bar').style.display = 'flex';
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearImage() {
+    currentImageBase64 = null;
+    document.getElementById('file-input').value = '';
+    document.getElementById('preview-bar').style.display = 'none';
+  }
+
+  async function describeImageChutes(base64Img) {
+    const res = await fetch('https://chutes.ai', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + chutesKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'Qwen/Qwen2.5-VL-72B-Instruct',
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'text', text: 'Подробно опиши на русском языке, что изображено на картинке (внешность персонажа, одежда, поза, эмоции, текст, обстановка). Без вступлений, только факты.' },
+            { type: 'image_url', image_url: { url: base64Img } }
+          ]
+        }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    return data.choices[0].message.content.trim();
+  }
+
+  async function sendMessage(isRegen) {
+    if (!chutesKey) { openSettings(); return; }
+
+    const chat = getActiveChat();
+    const inputEl = document.getElementById('input');
+    let imgToSend = currentImageBase64;
+    let userText = inputEl.value.trim();
+
+    if (!isRegen) {
+      if (!userText && !imgToSend) return;
+      inputEl.value = '';
+      clearImage();
+      if (chat.messages.length === 0 && userText) {
+        chat.title = userText.slice(0, 22) + (userText.length > 22 ? '...' : '');
+      }
+      chat.messages.push({
+        role: 'user',
+        content: userText || 'Посмотри на это изображение.',
+        displayContent: userText || '[Изображение]',
+        img: imgToSend
+      });
+    }
+    saveAll();
+    render();
+
+    const chatEl = document.getElementById('chat');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'msg bot';
+    loadingDiv.textContent = imgToSend ? 'Изучает фото и пишет...' : 'Пишет...';
+    chatEl.appendChild(loadingDiv);
+    chatEl.scrollTop = chatEl.scrollHeight;
+
+    try {
+      if (!isRegen && imgToSend) {
+        const imgDesc = await describeImageChutes(imgToSend);
+        const lastMsg = chat.messages[chat.messages.length - 1];
+        lastMsg.content = '[Пользователь прикрепил изображение. Описание картинки: ' + imgDesc + ']\n\n' + userText;
+        saveAll();
+      }
+
+      const apiMessages = [
+        { role: 'system', content: sysPrompt },
+        ...chat.messages.map(m => ({ role: m.role, content: m.content }))
+      ];
+
+      const res = await fetch('https://chutes.ai', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + chutesKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: modelId,
+          messages: apiMessages
+        })
+      });
+      const data = await res.json();
+      loadingDiv.remove();
+      if (data.error) {
+        alert('Ошибка: ' + (data.error.message || JSON.stringify(data.error)));
+      } else if (data.choices && data.choices[0]) {
+        let reply = data.choices[0].message.content;
+        reply = reply.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+        chat.messages.push({ role: 'assistant', content: reply });
+        saveAll();
+        render();
+      } else {
+        alert('Неожиданный ответ сервера.');
+      }
+    } catch (e) {
+      loadingDiv.remove();
+      alert(e.message || 'Ошибка сети.');
+    }
+  }
+
+  function openSettings() {
+    updateAvatarPreview();
+    document.getElementById('chutes-key').value = chutesKey;
+    document.getElementById('model-select').value = modelId;
+    document.getElementById('preset-select').value = preset;
+    document.getElementById('sys-prompt').value = sysPrompt;
+    document.getElementById('settings-modal').style.display = 'flex';
+  }
+
+  function closeSettings() {
+    document.getElementById('settings-modal').style.display = 'none';
+  }
+
+  function onPresetChange() {
+    const val = document.getElementById('preset-select').value;
+    if (PRESETS[val]) {
+      document.getElementById('sys-prompt').value = PRESETS[val];
+    }
+  }
+
+  function saveSettings() {
+    chutesKey = document.getElementById('chutes-key').value.trim();
+    modelId = document.getElementById('model-select').value;
+    preset = document.getElementById('preset-select').value;
+    sysPrompt = document.getElementById('sys-prompt').value;
+    localStorage.setItem('rp_chutes_key', chutesKey);
+    localStorage.setItem('rp_chutes_model', modelId);
+    localStorage.setItem('rp_preset', preset);
+    localStorage.setItem('rp_prompt', sysPrompt);
+    closeSettings();
+  }
+
+  function exportChat() {
+    const chat = getActiveChat();
+    const txt = chat.messages.map(m => (m.role === 'user' ? 'Вы: ' : 'ИИ: ') + (m.displayContent || m.content)).join('\n\n---\n\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' }));
+    a.download = chat.title + '.txt';
+    a.click();
+  }
+
+  applyTheme();
+  render();
+  if (!chutesKey) openSettings();
 </script>
 </body>
 </html>
