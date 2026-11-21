@@ -339,7 +339,7 @@
     const chatEl = document.getElementById('chat'), loadingDiv = document.createElement('div');
     loadingDiv.className = 'msg bot'; loadingDiv.textContent = 'Пишет...'; chatEl.appendChild(loadingDiv); chatEl.scrollTop = chatEl.scrollHeight;
 
-    let endpoint = 'https://sambanova.ai', modelId = 'DeepSeek-V3-0324';
+    let endpoint = 'https://chance2-bridge.oia0131sher.workers.dev, modelId = 'DeepSeek-V3-0324';
     if (provider === 'together_v3') { endpoint = 'https://together.xyz'; modelId = 'deepseek-ai/DeepSeek-V3'; }
     else if (provider === 'fireworks_v3') { endpoint = 'https://fireworks.ai'; modelId = 'accounts/fireworks/models/deepseek-v3'; }
 
