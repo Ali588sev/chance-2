@@ -273,12 +273,12 @@
       const txt = document.createElement('div'); txt.textContent = m.displayContent || m.content; div.appendChild(txt);
       const act = document.createElement('div'); act.className = 'msg-actions';
       if (m.role === 'user') {
-        const editMsgBtn = document.createElement('span'); editMsgBtn.textContent = '✎ Изменить';
+        const editMsgBtn = document.createElement('span'); editMsgBtn.textContent = '✎';
         editMsgBtn.onclick = function() { const ed = prompt('Изменить:', m.displayContent || m.content); if (ed !== null && ed.trim() !== '') { m.content = ed.trim(); m.displayContent = ed.trim(); chat.messages = chat.messages.slice(0, idx + 1); saveAll(); sendMessage(true); } };
         act.appendChild(editMsgBtn);
       }
       if (m.role === 'assistant' && idx === chat.messages.length - 1) {
-        const regenBtn = document.createElement('span'); regenBtn.textContent = '↻ Перегенерировать';
+        const regenBtn = document.createElement('span'); regenBtn.textContent = '↻';
         regenBtn.onclick = function() { chat.messages.pop(); sendMessage(true); };
         act.appendChild(regenBtn);
       }
@@ -339,7 +339,7 @@
     const chatEl = document.getElementById('chat'), loadingDiv = document.createElement('div');
     loadingDiv.className = 'msg bot'; loadingDiv.textContent = 'Пишет...'; chatEl.appendChild(loadingDiv); chatEl.scrollTop = chatEl.scrollHeight;
 
-    let endpoint = 'https://chutes.ai', modelId = 'deepseek-ai/DeepSeek-V3-0324';
+    let endpoint = 'https://sambanova.ai', modelId = 'DeepSeek-V3-0324';
     if (provider === 'together_v3') { endpoint = 'https://together.xyz'; modelId = 'deepseek-ai/DeepSeek-V3'; }
     else if (provider === 'fireworks_v3') { endpoint = 'https://fireworks.ai'; modelId = 'accounts/fireworks/models/deepseek-v3'; }
 
