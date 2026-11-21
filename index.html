@@ -41,8 +41,7 @@
   .btns { display: flex; gap: 6px; flex-shrink: 0; }
   button { background: var(--btn-bg); color: var(--text); border: none; padding: 8px 10px; border-radius: 8px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; touch-action: manipulation; }
   button:active { opacity: 0.7; }
-
-  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 15; }
+    #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 15; }
   #sidebar { position: fixed; top: 0; bottom: 0; left: -290px; width: 280px; background: var(--sidebar); border-right: 1px solid var(--border); z-index: 20; transition: left 0.2s ease; display: flex; flex-direction: column; padding: 14px; gap: 10px; }
   #sidebar.open { left: 0; }
   .new-chat-btn { background: var(--accent); color: white; font-weight: 600; padding: 10px; border-radius: 10px; width: 100%; }
@@ -55,40 +54,37 @@
   .chat-item.active { border: 1px solid var(--accent); }
   .chat-info { flex: 1; min-width: 0; padding-right: 6px; }
   .chat-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
-  .chat-item.active .chat-title { font-weight: 600; }
   .chat-snippet-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
   .snippet-avatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; background: var(--accent); color: white; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .chat-snippet { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .chat-actions { display: flex; gap: 4px; flex-shrink: 0; }
   .icon-btn { color: var(--muted); padding: 4px; border-radius: 4px; display: inline-flex; align-items: center; }
-
   #chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .welcome-box { margin: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 20px; }
+  .welcome-dog { width: 96px; height: 96px; color: var(--accent); }
+  .welcome-text { font-size: 20px; font-weight: 600; color: var(--text); }
   .msg { max-width: 88%; padding: 12px 14px; border-radius: 14px; line-height: 1.5; font-size: 15px; white-space: pre-wrap; word-wrap: break-word; }
   .user { background: var(--user-msg); align-self: flex-end; border-bottom-right-radius: 4px; }
   .bot { background: var(--bot-msg); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
   .msg img { max-width: 100%; border-radius: 10px; margin-bottom: 8px; display: block; }
-  .msg-actions { display: flex; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .msg-actions { display: flex; gap: 12px; margin-top: 8px; font-size: 12px; color: var(--muted); }
   .msg-actions span { cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-
   #preview-bar { display: none; background: var(--card); padding: 8px 14px; border-top: 1px solid var(--border); align-items: center; gap: 10px; }
   #preview-bar img { height: 48px; border-radius: 6px; }
   #preview-bar span { font-size: 13px; color: var(--muted); flex: 1; }
-
   footer { background: var(--card); padding: 10px 12px; display: flex; gap: 8px; border-top: 1px solid var(--border); align-items: flex-end; }
   textarea { flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font-size: 15px; resize: none; max-height: 120px; outline: none; }
   #attach { background: var(--btn-bg); color: var(--text); padding: 10px 12px; border-radius: 12px; }
   #send { background: var(--accent); color: white; font-weight: 600; padding: 10px 15px; border-radius: 12px; }
-
   #settings-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); padding: 20px; align-items: center; justify-content: center; z-index: 30; }
   .modal-box { background: var(--card); padding: 20px; border-radius: 16px; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 9px; border: 1px solid var(--border); max-height: 90dvh; overflow-y: auto; }
-  .modal-box input, .modal-box select, .modal-box textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 9px 10px; border-radius: 8px; font-size: 14px; }
+  .modal-box select, .modal-box textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 9px 10px; border-radius: 8px; font-size: 14px; }
   .avatar-row { display: flex; align-items: center; gap: 10px; }
   #avatar-preview { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--accent); color: white; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   label { font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
-
 <div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
 <div id="sidebar">
   <button class="new-chat-btn" onclick="createNewChat()">+ Новый диалог</button>
@@ -99,7 +95,6 @@
   </div>
   <div id="chat-list"></div>
 </div>
-
 <header>
   <div class="left-head">
     <button id="btn-menu" onclick="toggleSidebar(true)" title="Чаты">
@@ -117,32 +112,21 @@
     </button>
   </div>
 </header>
-
 <div id="chat"></div>
-
-<div id="preview-bar">
-  <img id="preview-img" src="">
-  <span>Фото прикреплено</span>
-  <button onclick="clearImage()">✕</button>
-</div>
-
+<div id="preview-bar"><img id="preview-img" src=""><span>Фото прикреплено</span><button onclick="clearImage()">✕</button></div>
 <footer>
   <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(event)">
   <button id="attach" onclick="document.getElementById('file-input').click()" title="Прикрепить фото">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
   </button>
-    <textarea id="input" rows="1" placeholder="Напишите сообщение или прикрепите фото..." onkeydown="if(event.key==='Enter'&&!event.shiftKey&&window.innerWidth>768){event.preventDefault();sendMessage(false);}"></textarea>
+  <textarea id="input" rows="1" placeholder="Напишите сообщение или прикрепите фото..." onkeydown="if(event.key==='Enter'&&!event.shiftKey&&window.innerWidth>768){event.preventDefault();sendMessage(false);}"></textarea>
   <button id="send" onclick="sendMessage(false)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
   </button>
 </footer>
-
-  <div id="settings-modal">
+<div id="settings-modal">
   <div class="modal-box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3>Настройки</h3>
-      <button onclick="closeSettings()" style="padding:4px 8px;">✕</button>
-    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center;"><h3>Настройки</h3><button onclick="closeSettings()" style="padding:4px 8px;">✕</button></div>
     <label>Твоя аватарка (для метки твоих сообщений в поиске):</label>
     <div class="avatar-row">
       <div id="avatar-preview">Я</div>
@@ -150,13 +134,14 @@
       <button type="button" onclick="document.getElementById('avatar-input').click()">Выбрать фото</button>
       <button type="button" onclick="clearAvatar()" style="color: var(--muted);">Сбросить</button>
     </div>
-    <label>Ключ Chutes AI (cpk_...):</label>
-    <textarea rows="1" id="chutes-key" placeholder="Вставьте ключ cpk_..."></textarea>
-    <label>Модель DeepSeek:</label>
-    <select id="model-select">
-      <option value="deepseek-ai/DeepSeek-V3-0324">DeepSeek V3 (Классический характер)</option>
-      <option value="deepseek-ai/DeepSeek-R1">DeepSeek R1 (Глубокий анализ)</option>
+    <label>Сервер DeepSeek:</label>
+    <select id="provider-select">
+      <option value="chutes_v3">Chutes AI — DeepSeek V3 (ваш ключ cpk_...)</option>
+      <option value="together_v3">Together AI — DeepSeek V3 (ключ с api.together.xyz)</option>
+      <option value="fireworks_v3">Fireworks AI — DeepSeek V3 (ключ с fireworks.ai)</option>
     </select>
+    <label>Ваш ключ доступа:</label>
+    <textarea rows="1" id="api-key" placeholder="Вставьте ключ..."></textarea>
     <label>Режим работы (пресет):</label>
     <select id="preset-select" onchange="onPresetChange()">
       <option value="assistant">Универсальный помощник (для учёбы и задач)</option>
@@ -168,10 +153,10 @@
     <button onclick="saveSettings()" style="background: var(--accent); color: white; padding: 10px; font-weight: 600;">Сохранить</button>
   </div>
 </div>
-
 <script>
   const ICON_SUN = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   const ICON_MOON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  const DOG_SVG = '<svg class="welcome-dog" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M40 30 C27 25 18 33 17 44 C16 50 22 50 26 45 C30 40 34 35 38 33"/><path d="M74 31 C88 26 101 34 103 48 C104 54 98 55 94 49 C89 43 83 37 77 35"/><path d="M38 33 C47 26 65 26 75 33"/><rect x="36" y="36" width="20" height="15" rx="3" fill="currentColor" stroke="currentColor" stroke-width="2"/><rect x="61" y="38" width="20" height="15" rx="3" fill="currentColor" stroke="currentColor" stroke-width="2"/><line x1="56" y1="43" x2="61" y2="44"/><line x1="81" y1="44" x2="88" y2="41"/><line x1="41" y1="41" x2="44" y2="45" stroke="var(--bg)" stroke-width="2"/><line x1="46" y1="41" x2="48" y2="44" stroke="var(--bg)" stroke-width="2"/><line x1="66" y1="43" x2="69" y2="47" stroke="var(--bg)" stroke-width="2"/><line x1="71" y1="43" x2="73" y2="46" stroke="var(--bg)" stroke-width="2"/><path d="M36 46 L23 55 C20 57 20 62 24 64 C31 67 45 67 56 62"/><ellipse cx="23" cy="58" rx="3.5" ry="2.5" fill="currentColor"/><path d="M40 66 L36 96"/><path d="M76 53 L82 96"/><path d="M36 74 C29 77 28 88 33 96"/><path d="M51 78 L51 96"/><path d="M62 78 L62 96"/><path d="M81 84 C91 81 97 75 100 69 C96 78 90 86 82 91"/><line x1="25" y1="96" x2="96" y2="96"/></svg>';
 
   const PRESETS = {
     assistant: "Ты — умный, дружелюбный и точный ИИ-помощник. Отвечай на русском языке чётко, структурированно и по делу, помогай с учёбой, текстами, идеями и любыми вопросами.",
@@ -184,8 +169,8 @@
     chats = [{ id: String(Date.now()), title: 'Новый диалог', messages: [] }];
   }
   let activeChatId = localStorage.getItem('rp_active_id') || chats[0].id;
-  let chutesKey = localStorage.getItem('rp_chutes_key') || '';
-  let modelId = localStorage.getItem('rp_chutes_model') || 'deepseek-ai/DeepSeek-V3-0324';
+  let provider = localStorage.getItem('rp_ds_prov') || 'chutes_v3';
+  let apiKey = localStorage.getItem('rp_chutes_key') || '';
   let preset = localStorage.getItem('rp_preset') || 'assistant';
   let sysPrompt = localStorage.getItem('rp_prompt') || PRESETS.assistant;
   let themeMode = localStorage.getItem('rp_theme_mode') || 'auto';
@@ -193,75 +178,46 @@
   let currentImageBase64 = null;
 
   const systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
   function applyTheme() {
     let isDark = themeMode === 'auto' ? systemDarkQuery.matches : (themeMode === 'dark');
-    if (isDark) {
-      document.body.classList.remove('light');
-      document.getElementById('btn-theme').innerHTML = ICON_SUN;
-    } else {
-      document.body.classList.add('light');
-      document.getElementById('btn-theme').innerHTML = ICON_MOON;
-    }
+    if (isDark) { document.body.classList.remove('light'); document.getElementById('btn-theme').innerHTML = ICON_SUN; }
+    else { document.body.classList.add('light'); document.getElementById('btn-theme').innerHTML = ICON_MOON; }
   }
-
-  systemDarkQuery.addEventListener('change', () => {
-    if (themeMode === 'auto') applyTheme();
-  });
-
+  systemDarkQuery.addEventListener('change', () => { if (themeMode === 'auto') applyTheme(); });
   function cycleTheme() {
     const currentlyDark = !document.body.classList.contains('light');
     themeMode = currentlyDark ? 'light' : 'dark';
     localStorage.setItem('rp_theme_mode', themeMode);
     applyTheme();
   }
-
   function getActiveChat() {
     let c = chats.find(x => x.id === activeChatId);
     if (!c) { c = chats[0]; activeChatId = c.id; }
     return c;
   }
-
-  function saveAll() {
-    localStorage.setItem('rp_chats', JSON.stringify(chats));
-    localStorage.setItem('rp_active_id', activeChatId);
-  }
-
+  function saveAll() { localStorage.setItem('rp_chats', JSON.stringify(chats)); localStorage.setItem('rp_active_id', activeChatId); }
   function toggleSidebar(show) {
     document.getElementById('sidebar').className = show ? 'open' : '';
     document.getElementById('sidebar-overlay').style.display = show ? 'block' : 'none';
     if (show) renderChatList();
   }
-
   function onSearchInput() {
     const q = document.getElementById('chat-search').value;
     document.getElementById('clear-search').style.display = q ? 'block' : 'none';
     renderChatList();
   }
-
-  function clearSearch() {
-    document.getElementById('chat-search').value = '';
-    document.getElementById('clear-search').style.display = 'none';
-    renderChatList();
-  }
-
+  function clearSearch() { document.getElementById('chat-search').value = ''; document.getElementById('clear-search').style.display = 'none'; renderChatList(); }
   function createNewChat() {
     const id = String(Date.now());
     chats.unshift({ id: id, title: 'Новый диалог', messages: [] });
-    activeChatId = id;
-    saveAll();
-    render();
-    toggleSidebar(false);
+    activeChatId = id; saveAll(); render(); toggleSidebar(false);
   }
-
   function renderChatList() {
     const listEl = document.getElementById('chat-list');
     const query = (document.getElementById('chat-search').value || '').trim().toLowerCase();
     listEl.innerHTML = '';
-
     chats.forEach(c => {
-      let snippet = '';
-      let matchedRole = '';
+      let snippet = '', matchedRole = '';
       if (query) {
         const titleMatch = c.title.toLowerCase().includes(query);
         let msgMatch = null;
@@ -270,337 +226,160 @@
           const txt = (msgObj.displayContent || msgObj.content || '');
           const idx = txt.toLowerCase().indexOf(query);
           if (idx !== -1) {
-            const start = Math.max(0, idx - 18);
-            const end = Math.min(txt.length, idx + query.length + 28);
+            const start = Math.max(0, idx - 18), end = Math.min(txt.length, idx + query.length + 28);
             msgMatch = (start > 0 ? '...' : '') + txt.slice(start, end).replace(/\n/g, ' ') + (end < txt.length ? '...' : '');
-            matchedRole = msgObj.role;
-            break;
+            matchedRole = msgObj.role; break;
           }
         }
         if (!titleMatch && !msgMatch) return;
         if (msgMatch) snippet = msgMatch;
       }
-
       const item = document.createElement('div');
       item.className = 'chat-item' + (c.id === activeChatId ? ' active' : '');
-
       const info = document.createElement('div');
       info.className = 'chat-info';
       info.onclick = function() { activeChatId = c.id; saveAll(); render(); toggleSidebar(false); };
-
       const title = document.createElement('div');
-      title.className = 'chat-title';
-      title.textContent = c.title;
-      info.appendChild(title);
-
+      title.className = 'chat-title'; title.textContent = c.title; info.appendChild(title);
       if (snippet) {
-        const snipRow = document.createElement('div');
-        snipRow.className = 'chat-snippet-row';
-
+        const snipRow = document.createElement('div'); snipRow.className = 'chat-snippet-row';
         if (matchedRole === 'user') {
-          if (userAvatar) {
-            const avImg = document.createElement('img');
-            avImg.className = 'snippet-avatar';
-            avImg.src = userAvatar;
-            snipRow.appendChild(avImg);
-          } else {
-            const avBadge = document.createElement('span');
-            avBadge.className = 'snippet-avatar';
-            avBadge.textContent = 'Я';
-            snipRow.appendChild(avBadge);
-          }
+          if (userAvatar) { const avImg = document.createElement('img'); avImg.className = 'snippet-avatar'; avImg.src = userAvatar; snipRow.appendChild(avImg); }
+          else { const avBadge = document.createElement('span'); avBadge.className = 'snippet-avatar'; avBadge.textContent = 'Я'; snipRow.appendChild(avBadge); }
         }
-
-        const snipEl = document.createElement('div');
-        snipEl.className = 'chat-snippet';
-        snipEl.textContent = snippet;
-        snipRow.appendChild(snipEl);
-        info.appendChild(snipRow);
+        const snipEl = document.createElement('div'); snipEl.className = 'chat-snippet'; snipEl.textContent = snippet; snipRow.appendChild(snipEl); info.appendChild(snipRow);
       }
-
-      const actions = document.createElement('div');
-      actions.className = 'chat-actions';
-
-      const editBtn = document.createElement('span');
-      editBtn.className = 'icon-btn';
+      const actions = document.createElement('div'); actions.className = 'chat-actions';
+      const editBtn = document.createElement('span'); editBtn.className = 'icon-btn';
       editBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
-      editBtn.onclick = function(e) {
-        e.stopPropagation();
-        const newName = prompt('Новое название чата:', c.title);
-        if (newName && newName.trim()) {
-          c.title = newName.trim();
-          saveAll();
-          renderChatList();
-        }
-      };
-
-      const delBtn = document.createElement('span');
-      delBtn.className = 'icon-btn';
+      editBtn.onclick = function(e) { e.stopPropagation(); const n = prompt('Новое название:', c.title); if (n && n.trim()) { c.title = n.trim(); saveAll(); renderChatList(); } };
+      const delBtn = document.createElement('span'); delBtn.className = 'icon-btn';
       delBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
-      delBtn.onclick = function(e) {
-        e.stopPropagation();
-        if (confirm('Удалить этот диалог?')) {
-          chats = chats.filter(x => x.id !== c.id);
-          if (chats.length === 0) {
-            chats = [{ id: String(Date.now()), title: 'Новый диалог', messages: [] }];
-          }
-          activeChatId = chats[0].id;
-          saveAll();
-          renderChatList();
-          render();
-        }
-      };
-
-      actions.appendChild(editBtn);
-      actions.appendChild(delBtn);
-      item.appendChild(info);
-      item.appendChild(actions);
-            listEl.appendChild(item);
+      delBtn.onclick = function(e) { e.stopPropagation(); if (confirm('Удалить?')) { chats = chats.filter(x => x.id !== c.id); if (chats.length === 0) chats = [{ id: String(Date.now()), title: 'Новый диалог', messages: [] }]; activeChatId = chats[0].id; saveAll(); renderChatList(); render(); } };
+      actions.appendChild(editBtn); actions.appendChild(delBtn); item.appendChild(info); item.appendChild(actions); listEl.appendChild(item);
     });
   }
 
   function render() {
-    const chat = getActiveChat();
-    const chatEl = document.getElementById('chat');
-    chatEl.innerHTML = '';
+    const chat = getActiveChat(), chatEl = document.getElementById('chat'); chatEl.innerHTML = '';
+    if (chat.messages.length === 0) {
+      const welcome = document.createElement('div'); welcome.className = 'welcome-box';
+      welcome.innerHTML = DOG_SVG + '<div class="welcome-text">Привет!</div>';
+      chatEl.appendChild(welcome); return;
+    }
     chat.messages.forEach((m, idx) => {
-      const div = document.createElement('div');
-      div.className = 'msg ' + (m.role === 'user' ? 'user' : 'bot');
-      if (m.img) {
-        const im = document.createElement('img');
-        im.src = m.img;
-        div.appendChild(im);
+      const div = document.createElement('div'); div.className = 'msg ' + (m.role === 'user' ? 'user' : 'bot');
+      if (m.img) { const im = document.createElement('img'); im.src = m.img; div.appendChild(im); }
+      const txt = document.createElement('div'); txt.textContent = m.displayContent || m.content; div.appendChild(txt);
+      const act = document.createElement('div'); act.className = 'msg-actions';
+      if (m.role === 'user') {
+        const editMsgBtn = document.createElement('span'); editMsgBtn.textContent = '✎ Изменить';
+        editMsgBtn.onclick = function() { const ed = prompt('Изменить:', m.displayContent || m.content); if (ed !== null && ed.trim() !== '') { m.content = ed.trim(); m.displayContent = ed.trim(); chat.messages = chat.messages.slice(0, idx + 1); saveAll(); sendMessage(true); } };
+        act.appendChild(editMsgBtn);
       }
-      const txt = document.createElement('div');
-      txt.textContent = m.displayContent || m.content;
-      div.appendChild(txt);
-
       if (m.role === 'assistant' && idx === chat.messages.length - 1) {
-        const act = document.createElement('div');
-        act.className = 'msg-actions';
-        const regenBtn = document.createElement('span');
-        regenBtn.textContent = '↻ Перегенерировать';
+        const regenBtn = document.createElement('span'); regenBtn.textContent = '↻ Перегенерировать';
         regenBtn.onclick = function() { chat.messages.pop(); sendMessage(true); };
         act.appendChild(regenBtn);
-        div.appendChild(act);
       }
+      if (act.children.length > 0) div.appendChild(act);
       chatEl.appendChild(div);
     });
     chatEl.scrollTop = chatEl.scrollHeight;
   }
-
   function handleAvatarUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(event) {
       const img = new Image();
       img.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 96;
-        canvas.height = 96;
+        const canvas = document.createElement('canvas'); canvas.width = 96; canvas.height = 96;
         const size = Math.min(img.width, img.height);
-        const sx = (img.width - size) / 2;
-        const sy = (img.height - size) / 2;
-        canvas.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, 96, 96);
-        userAvatar = canvas.toDataURL('image/jpeg', 0.85);
-        localStorage.setItem('rp_user_avatar', userAvatar);
-        updateAvatarPreview();
+        canvas.getContext('2d').drawImage(img, (img.width - size) / 2, (img.height - size) / 2, size, size, 0, 0, 96, 96);
+        userAvatar = canvas.toDataURL('image/jpeg', 0.85); localStorage.setItem('rp_user_avatar', userAvatar); updateAvatarPreview();
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   }
-
-  function clearAvatar() {
-    userAvatar = '';
-    localStorage.removeItem('rp_user_avatar');
-    document.getElementById('avatar-input').value = '';
-    updateAvatarPreview();
-  }
-
+  function clearAvatar() { userAvatar = ''; localStorage.removeItem('rp_user_avatar'); document.getElementById('avatar-input').value = ''; updateAvatarPreview(); }
   function updateAvatarPreview() {
     const prev = document.getElementById('avatar-preview');
-    if (userAvatar) {
-      prev.innerHTML = '<img src="' + userAvatar + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
-    } else {
-      prev.textContent = 'Я';
-    }
+    prev.innerHTML = userAvatar ? '<img src="' + userAvatar + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">' : 'Я';
   }
-
   function handleImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(event) {
       const img = new Image();
       img.onload = function() {
-        const canvas = document.createElement('canvas');
-        const maxDim = 800;
+        const canvas = document.createElement('canvas'), maxDim = 800;
         let w = img.width, h = img.height;
-        if (w > maxDim || h > maxDim) {
-          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-          else { w = Math.round(w * maxDim / h); h = maxDim; }
-        }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
-        document.getElementById('preview-img').src = currentImageBase64;
-        document.getElementById('preview-bar').style.display = 'flex';
+        if (w > maxDim || h > maxDim) { if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; } else { w = Math.round(w * maxDim / h); h = maxDim; } }
+        canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8); document.getElementById('preview-img').src = currentImageBase64; document.getElementById('preview-bar').style.display = 'flex';
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   }
-
-  function clearImage() {
-    currentImageBase64 = null;
-    document.getElementById('file-input').value = '';
-    document.getElementById('preview-bar').style.display = 'none';
-  }
-
-  async function describeImageChutes(base64Img) {
-    const res = await fetch('https://corsproxy.io', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + chutesKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'Qwen/Qwen2.5-VL-72B-Instruct',
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'text', text: 'Подробно опиши на русском языке, что изображено на картинке (внешность персонажа, одежда, поза, эмоции, текст, обстановка). Без вступлений, только факты.' },
-            { type: 'image_url', image_url: { url: base64Img } }
-          ]
-        }]
-      })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-    return data.choices[0].message.content.trim();
-  }
+  function clearImage() { currentImageBase64 = null; document.getElementById('file-input').value = ''; document.getElementById('preview-bar').style.display = 'none'; }
 
   async function sendMessage(isRegen) {
-    if (!chutesKey) { openSettings(); return; }
-
-    const chat = getActiveChat();
-    const inputEl = document.getElementById('input');
-    let imgToSend = currentImageBase64;
-    let userText = inputEl.value.trim();
-
+    if (!apiKey) { openSettings(); return; }
+    const chat = getActiveChat(), inputEl = document.getElementById('input');
+    let imgToSend = currentImageBase64, userText = inputEl.value.trim();
     if (!isRegen) {
       if (!userText && !imgToSend) return;
-      inputEl.value = '';
-      clearImage();
-      if (chat.messages.length === 0 && userText) {
-        chat.title = userText.slice(0, 22) + (userText.length > 22 ? '...' : '');
-      }
-      chat.messages.push({
-        role: 'user',
-        content: userText || 'Посмотри на это изображение.',
-        displayContent: userText || '[Изображение]',
-        img: imgToSend
-      });
+      inputEl.value = ''; clearImage();
+      if (chat.messages.length === 0 && userText) chat.title = userText.slice(0, 22) + (userText.length > 22 ? '...' : '');
+      chat.messages.push({ role: 'user', content: userText || 'Посмотри на это изображение.', displayContent: userText || '[Изображение]', img: imgToSend });
     }
-    saveAll();
-    render();
+    saveAll(); render();
+    const chatEl = document.getElementById('chat'), loadingDiv = document.createElement('div');
+    loadingDiv.className = 'msg bot'; loadingDiv.textContent = 'Пишет...'; chatEl.appendChild(loadingDiv); chatEl.scrollTop = chatEl.scrollHeight;
 
-    const chatEl = document.getElementById('chat');
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'msg bot';
-    loadingDiv.textContent = imgToSend ? 'Изучает фото и пишет...' : 'Пишет...';
-    chatEl.appendChild(loadingDiv);
-    chatEl.scrollTop = chatEl.scrollHeight;
+    let endpoint = 'https://chutes.ai', modelId = 'deepseek-ai/DeepSeek-V3-0324';
+    if (provider === 'together_v3') { endpoint = 'https://together.xyz'; modelId = 'deepseek-ai/DeepSeek-V3'; }
+    else if (provider === 'fireworks_v3') { endpoint = 'https://fireworks.ai'; modelId = 'accounts/fireworks/models/deepseek-v3'; }
 
     try {
-      if (!isRegen && imgToSend) {
-        const imgDesc = await describeImageChutes(imgToSend);
-        const lastMsg = chat.messages[chat.messages.length - 1];
-        lastMsg.content = '[Пользователь прикрепил изображение. Описание картинки: ' + imgDesc + ']\n\n' + userText;
-        saveAll();
-      }
-
-      const apiMessages = [
-        { role: 'system', content: sysPrompt },
-        ...chat.messages.map(m => ({ role: m.role, content: m.content }))
-      ];
-
-      const res = await fetch('https://corsproxy.io', {
+      const res = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + chutesKey,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: modelId,
-          messages: apiMessages
-        })
+        headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: modelId, messages: [{ role: 'system', content: sysPrompt }, ...chat.messages.map(m => ({ role: m.role, content: m.content }))] })
       });
       const data = await res.json();
       loadingDiv.remove();
-      if (data.error) {
-        alert('Ошибка: ' + (data.error.message || JSON.stringify(data.error)));
-      } else if (data.choices && data.choices[0]) {
-        let reply = data.choices[0].message.content;
-        reply = reply.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-        chat.messages.push({ role: 'assistant', content: reply });
-        saveAll();
-        render();
-      } else {
-        alert('Неожиданный ответ сервера.');
-      }
-    } catch (e) {
-      loadingDiv.remove();
-      alert(e.message || 'Ошибка сети.');
-    }
+      if (data.error) { alert('Ошибка: ' + (data.error.message || JSON.stringify(data.error))); }
+      else if (data.choices && data.choices[0]) {
+        let reply = data.choices[0].message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+        chat.messages.push({ role: 'assistant', content: reply }); saveAll(); render();
+      } else { alert('Неожиданный ответ сервера.'); }
+    } catch (e) { loadingDiv.remove(); alert('Ошибка сети: ' + (e.message || 'проверьте VPN')); }
   }
 
   function openSettings() {
     updateAvatarPreview();
-    document.getElementById('chutes-key').value = chutesKey;
-    document.getElementById('model-select').value = modelId;
+    document.getElementById('provider-select').value = provider;
+    document.getElementById('api-key').value = apiKey;
     document.getElementById('preset-select').value = preset;
     document.getElementById('sys-prompt').value = sysPrompt;
     document.getElementById('settings-modal').style.display = 'flex';
   }
-
-  function closeSettings() {
-    document.getElementById('settings-modal').style.display = 'none';
-  }
-
-  function onPresetChange() {
-    const val = document.getElementById('preset-select').value;
-    if (PRESETS[val]) {
-      document.getElementById('sys-prompt').value = PRESETS[val];
-    }
-  }
-
+  function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+  function onPresetChange() { const val = document.getElementById('preset-select').value; if (PRESETS[val]) document.getElementById('sys-prompt').value = PRESETS[val]; }
   function saveSettings() {
-    chutesKey = document.getElementById('chutes-key').value.trim();
-    modelId = document.getElementById('model-select').value;
-    preset = document.getElementById('preset-select').value;
-    sysPrompt = document.getElementById('sys-prompt').value;
-    localStorage.setItem('rp_chutes_key', chutesKey);
-    localStorage.setItem('rp_chutes_model', modelId);
-    localStorage.setItem('rp_preset', preset);
-    localStorage.setItem('rp_prompt', sysPrompt);
+    provider = document.getElementById('provider-select').value; apiKey = document.getElementById('api-key').value.trim();
+    preset = document.getElementById('preset-select').value; sysPrompt = document.getElementById('sys-prompt').value;
+    localStorage.setItem('rp_ds_prov', provider); localStorage.setItem('rp_chutes_key', apiKey); localStorage.setItem('rp_preset', preset); localStorage.setItem('rp_prompt', sysPrompt);
     closeSettings();
   }
-
   function exportChat() {
-    const chat = getActiveChat();
-    const txt = chat.messages.map(m => (m.role === 'user' ? 'Вы: ' : 'ИИ: ') + (m.displayContent || m.content)).join('\n\n---\n\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' }));
-    a.download = chat.title + '.txt';
-    a.click();
+    const chat = getActiveChat(), txt = chat.messages.map(m => (m.role === 'user' ? 'Вы: ' : 'ИИ: ') + (m.displayContent || m.content)).join('\n\n---\n\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' })); a.download = chat.title + '.txt'; a.click();
   }
-
-  applyTheme();
-  render();
-  if (!chutesKey) openSettings();
+  applyTheme(); render(); if (!apiKey) openSettings();
 </script>
 </body>
 </html>
