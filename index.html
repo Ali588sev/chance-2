@@ -340,7 +340,7 @@
     loadingDiv.className = 'msg bot'; loadingDiv.textContent = 'Пишет...'; chatEl.appendChild(loadingDiv); chatEl.scrollTop = chatEl.scrollHeight;
 
     let endpoint = 'https://chance2-bridge.oia0131sher.workers.dev';
-let modelId = 'Meta-Llama-3.3-70b-Instruct';
+let modelId = 'MiniMax-M3.1-Flash';
     if (provider === 'together_v3') { endpoint = 'https://together.xyz'; modelId = 'deepseek-ai/DeepSeek-V3'; }
     else if (provider === 'fireworks_v3') { endpoint = 'https://fireworks.ai'; modelId = 'accounts/fireworks/models/deepseek-v3'; }
 
