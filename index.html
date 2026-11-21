@@ -356,7 +356,7 @@ let modelId = 'deepseek-ai/DeepSeek-V3-0324';
       else if (data.choices && data.choices[0]) {
         let reply = data.choices[0].message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
         chat.messages.push({ role: 'assistant', content: reply }); saveAll(); render();
-      } else { alert('Неожиданный ответ сервера.'); }
+      } else { alert('Ответ Chutes: ' + JSON.stringify(data)); }
     } catch (e) { loadingDiv.remove(); alert('Ошибка сети: ' + (e.message || 'проверьте VPN')); }
   }
 
