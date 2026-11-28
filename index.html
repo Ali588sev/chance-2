@@ -148,8 +148,10 @@
       <option value="roleplay">Творческий соигрок (ролевые игры и истории)</option>
       <option value="custom">Своя инструкция</option>
     </select>
-    <label>Системная инструкция:</label>
+    <label>Системная инструкция</label>
     <textarea id="sys-prompt" rows="3"></textarea>
+    <label>Профиль синхронизации (например: ali или mama)</label>
+    <input type="text" id="sync-profile" placeholder="ali" />
     <button onclick="saveSettings()" style="background: var(--accent); color: white; padding: 10px; font-weight: 600;">Сохранить</button>
   </div>
 </div>
@@ -195,7 +197,58 @@
     if (!c) { c = chats[0]; activeChatId = c.id; }
     return c;
   }
-  function saveAll() { localStorage.setItem('rp_chats', JSON.stringify(chats)); localStorage.setItem('rp_active_id', activeChatId); }
+    const SYNC_URL = 'https://chance2-bridge.oia0131sher.workers.dev/sync';
+  let syncProfile = localStorage.getItem('rp_sync_profile') || 'ali';
+  let syncTimer = null;
+
+  function saveAll() {
+    localStorage.setItem('rp_chats', JSON.stringify(chats));
+    localStorage.setItem('rp_active_id', activeChatId);
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      fetch(SYNC_URL + '?profile=' + encodeURIComponent(syncProfile), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chats, activeChatId, apiKey, preset, sysPrompt })
+      }).catch(() => {});
+    }, 800);
+  }
+
+  async function pullFromCloud() {
+    try {
+      const r = await fetch(SYNC_URL + '?profile=' + encodeURIComponent(syncProfile));
+      const d = await r.json();
+      if (d && Array.isArray(d.chats) && d.chats.length > 0) {
+        chats = d.chats;
+        activeChatId = d.activeChatId || chats[0].id;
+        if (d.apiKey) { apiKey = d.apiKey; localStorage.setItem('rp_chutes_key', apiKey); }
+        if (d.preset) { preset = d.preset; localStorage.setItem('rp_preset', preset); }
+        if (d.sysPrompt) { sysPrompt = d.sysPrompt; localStorage.setItem('rp_prompt', sysPrompt); }
+        localStorage.setItem('rp_chats', JSON.stringify(chats));
+        localStorage.setItem('rp_active_id', activeChatId);
+        renderChatList(); render();
+      }
+    } catch (e) {}
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const spEl = document.getElementById('sync-profile');
+    if (spEl) spEl.value = syncProfile;
+    const origSave = window.saveSettings;
+    window.saveSettings = function() {
+      const val = (document.getElementById('sync-profile')?.value || '').trim().toLowerCase();
+      if (val && val !== syncProfile) {
+        syncProfile = val;
+        localStorage.setItem('rp_sync_profile', syncProfile);
+        if (typeof origSave === 'function') origSave();
+        pullFromCloud();
+        return;
+      }
+      if (typeof origSave === 'function') origSave();
+      saveAll();
+    };
+    pullFromCloud();
+  });
   function toggleSidebar(show) {
     document.getElementById('sidebar').className = show ? 'open' : '';
     document.getElementById('sidebar-overlay').style.display = show ? 'block' : 'none';
