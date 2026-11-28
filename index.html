@@ -270,19 +270,42 @@
     chat.messages.forEach((m, idx) => {
       const div = document.createElement('div'); div.className = 'msg ' + (m.role === 'user' ? 'user' : 'bot');
       if (m.img) { const im = document.createElement('img'); im.src = m.img; div.appendChild(im); }
-      const txt = document.createElement('div'); txt.textContent = m.displayContent || m.content; div.appendChild(txt);
-      const act = document.createElement('div'); act.className = 'msg-actions';
-      if (m.role === 'user') {
-        const editMsgBtn = document.createElement('span'); editMsgBtn.textContent = '✎';
-        editMsgBtn.onclick = function() { const ed = prompt('Изменить:', m.displayContent || m.content); if (ed !== null && ed.trim() !== '') { m.content = ed.trim(); m.displayContent = ed.trim(); chat.messages = chat.messages.slice(0, idx + 1); saveAll(); sendMessage(true); } };
-        act.appendChild(editMsgBtn);
-      }
-      if (m.role === 'assistant' && idx === chat.messages.length - 1) {
-        const regenBtn = document.createElement('span'); regenBtn.textContent = '↻';
-        regenBtn.onclick = function() { chat.messages.pop(); sendMessage(true); };
-        act.appendChild(regenBtn);
-      }
-      if (act.children.length > 0) div.appendChild(act);
+          const rawText = m.displayContent || m.content || '';
+    const txt = document.createElement('div');
+    txt.innerHTML = rawText
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+      .replace(/\*(.+?)\*/g, '<i>$1</i>')
+      .replace(/\n/g, '<br>');
+    div.appendChild(txt);
+
+    const act = document.createElement('div'); act.className = 'msg-actions';
+
+    const copyBtn = document.createElement('span');
+    copyBtn.title = 'Копировать';
+    copyBtn.textContent = '⧉';
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(rawText);
+      copyBtn.textContent = '✓ Скопировано';
+      setTimeout(() => { copyBtn.textContent = '⧉'; }, 1500);
+    };
+    act.appendChild(copyBtn);
+
+    if (m.role === 'user') {
+      const editMsgBtn = document.createElement('span');
+      editMsgBtn.title = 'Изменить';
+      editMsgBtn.textContent = '✎';
+      editMsgBtn.onclick = function() { const ed = prompt('Изменить:', rawText); if (ed !== null && ed.trim()) { chat.messages[idx].content = ed.trim(); chat.messages[idx].displayContent = ed.trim(); saveAll(); render(); } };
+      act.appendChild(editMsgBtn);
+    }
+    if (m.role === 'assistant' && idx === chat.messages.length - 1) {
+      const regenBtn = document.createElement('span');
+      regenBtn.title = 'Перегенерировать';
+      regenBtn.textContent = '↻';
+      regenBtn.onclick = function() { chat.messages.pop(); sendMessage(true); };
+      act.appendChild(regenBtn);
+    }
+    if (act.children.length > 0) div.appendChild(act);
       chatEl.appendChild(div);
     });
     chatEl.scrollTop = chatEl.scrollHeight;
